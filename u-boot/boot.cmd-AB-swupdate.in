@@ -1,0 +1,7 @@
+# vim: set ft=sh:
+saveenv
+fdt addr ${fdt_addr} && fdt get value bootargs /chosen bootargs
+if env exists rpipart; then echo Booting from mmcblk0p${rpipart}; else setenv rpipart 5; echo rpipart not set, default to ${rpipart}; fi
+load mmc 0:1 ${kernel_addr_r} Image
+setenv bootargs "${bootargs} root=/dev/mmcblk0p${rpipart}"
+booti ${kernel_addr_r} - ${fdt_addr}
